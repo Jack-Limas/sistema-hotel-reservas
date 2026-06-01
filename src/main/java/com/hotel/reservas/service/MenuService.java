@@ -22,6 +22,12 @@ public class MenuService {
     @Autowired
     private OpcionMenuRepository opcionMenuRepository;
 
+    // RECURSIVIDAD — este método construye el árbol de menú de forma recursiva
+    // FLUJO: 1) obtiene opciones raíz (sin padre) del repositorio
+    //        2) llama construirHijos() por cada raíz
+    //        3) construirHijos() se llama a sí mismo por cada hijo encontrado
+    //        4) el caso base es cuando un nodo no tiene más hijos
+    // RESULTADO: árbol completo OpcionMenu con hijos anidados en memoria
     public List<OpcionMenu> obtenerMenuPorRol(String rol) {
         List<OpcionMenu> todas = opcionMenuRepository.findByRolAndActivoTrue(rol);
         List<OpcionMenu> raices = opcionMenuRepository.findByPadreIsNullAndRolAndActivoTrue(rol);
@@ -32,9 +38,12 @@ public class MenuService {
         return raices;
     }
 
-    // RECURSIVIDAD: Este método se invoca a sí mismo para construir el árbol nivel por nivel.
-    // Caso base: cuando no existen opciones cuyo padre sea el nodo actual, la recursión termina.
-    // Cada llamada resuelve los hijos del nodo recibido y luego se llama a sí misma para cada hijo.
+    // RECURSIVIDAD — método recursivo que construye el subárbol de un nodo
+    // PARÁMETROS: padre=nodo actual, todas=lista plana de todas las opciones
+    // CASO BASE: cuando ninguna opción tiene como padre al nodo actual
+    //            el for no ejecuta y la recursión termina naturalmente
+    // LLAMADA RECURSIVA: construirHijos(hijo, todas) — mismo método, diferente nodo
+    // NIVEL 1 padre=null → NIVEL 2 padre=nivel1 → NIVEL 3 padre=nivel2
     private void construirHijos(OpcionMenu padre, List<OpcionMenu> todas) {
         List<OpcionMenu> hijos = todas.stream()
                 .filter(o -> o.getPadre() != null

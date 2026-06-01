@@ -25,13 +25,19 @@ public class OpcionMenu {
     private Boolean activo = true;
     private String rol;
 
-    // RECURSIVIDAD: Referencia al nodo padre de la misma clase para construir la jerarquía.
+    // RECURSIVIDAD — esta clase se referencia a sí misma
+    // padre: apunta al OpcionMenu que lo contiene (null si es raíz)
+    // hijos: lista de OpcionMenu que este nodo contiene
+    // Estructura de árbol: Sistema Hotel → Gestión → Huéspedes
+    //                                              → Habitaciones
+    //                      Sistema Hotel → Reportes → Facturas
     @ManyToOne
     @JoinColumn(name = "padre_id", nullable = true)
     private OpcionMenu padre;
 
-    // RECURSIVIDAD: Lista de nodos hijos de la misma clase; @JsonIgnore evita recursión infinita en serialización.
-    @JsonIgnore
+    // RECURSIVIDAD: Lista de nodos hijos. @JsonIgnoreProperties({"padre"}) permite serializar hijos
+    // pero ignora la referencia de vuelta al padre en cada hijo, evitando recursión infinita en JSON.
+    @JsonIgnoreProperties({"padre"})
     @OneToMany(mappedBy = "padre")
     private List<OpcionMenu> hijos = new ArrayList<>();
 

@@ -46,6 +46,16 @@ public class AuthService {
         return new LoginResponse(token, usuario.getRol().name(), usuario.getUsername());
     }
 
+    // Valida el JWT actual y genera uno nuevo con la misma identidad — sin necesitar contraseña.
+    public LoginResponse refreshToken(String token) {
+        String username = jwtUtil.extractUsername(token);
+        String rol = jwtUtil.extractRol(token);
+        Usuario usuario = usuarioRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        String newToken = jwtUtil.generateToken(usuario.getUsername(), usuario.getRol().name());
+        return new LoginResponse(newToken, rol, username);
+    }
+
     public LoginResponse registrar(RegisterRequest request) {
         if (usuarioRepository.existsByUsername(request.getUsername())) {
             throw new RuntimeException("El username ya está en uso");
@@ -65,6 +75,9 @@ public class AuthService {
             huesped = huespedRepository.save(huesped);
         }
 
+        // ENCAPSULAMIENTO — password nunca se almacena en texto plano
+        // BCryptPasswordEncoder.encode() genera hash irreversible
+        // La verificación se hace con BCrypt.matches() nunca comparando directo
         Usuario usuario = new Usuario();
         usuario.setUsername(request.getUsername());
         usuario.setPassword(passwordEncoder.encode(request.getPassword()));

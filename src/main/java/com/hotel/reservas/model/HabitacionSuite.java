@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hotel.reservas.model.enums.TipoHabitacion;
 import jakarta.persistence.*;
 
-// HERENCIA: Extiende Habitacion con atributos exclusivos de suite (desayuno y vista al mar).
-// POLIMORFISMO: Implementa calcularPrecio() sumando cargos adicionales según las opciones activadas.
+// HERENCIA — hereda de Habitacion: idHabitacion, numero, piso,
+//            capacidad, descripcion, disponible, tipo
+// POLIMORFISMO — sobreescribe calcularPrecio() con lógica propia
+// ENCAPSULAMIENTO — atributos propios privados con getters/setters
 @Entity
 @Table(name = "habitacion_suite")
 @PrimaryKeyJoinColumn

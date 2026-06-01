@@ -43,9 +43,13 @@ public class ReservaService {
             throw new RuntimeException("Habitacion no disponible");
         }
 
-        // POLIMORFISMO: calcularPrecio() se comporta diferente según el tipo concreto de habitación.
-        // Java resuelve en tiempo de ejecución si es HabitacionEstandar, HabitacionFamiliar,
-        // HabitacionSuite o HabitacionEjecutiva, invocando la implementación correcta de cada una.
+        // POLIMORFISMO — habitacion.calcularPrecio() se comporta diferente
+        // según el tipo real del objeto en tiempo de ejecución:
+        // HabitacionEstandar.calcularPrecio() → retorna precioBase
+        // HabitacionFamiliar.calcularPrecio() → precioBase * numeroCamas * 0.9
+        // HabitacionSuite.calcularPrecio()    → precioBase + desayuno + vistaAlMar
+        // HabitacionEjecutiva.calcularPrecio()→ precioBase + desayuno + pisoEjecutivo
+        // Spring/Hibernate resuelve el tipo real gracias a @Inheritance(JOINED)
         double precioPorNoche = habitacion.calcularPrecio();
         int noches = reserva.calcularNoches();
         reserva.setTotalEstimado(precioPorNoche * noches);

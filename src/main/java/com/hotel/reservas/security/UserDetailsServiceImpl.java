@@ -22,10 +22,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Usuario usuario = usuarioRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
 
+        // ENCAPSULAMIENTO: Authority con prefijo ROLE_ explícito para evitar
+        // el doble prefijo ROLE_ROLE_ que produce el método .roles().
         return User.builder()
                 .username(usuario.getUsername())
                 .password(usuario.getPassword())
-                .roles(usuario.getRol().name())
+                .authorities("ROLE_" + usuario.getRol().name())
                 .build();
     }
 }

@@ -5,9 +5,11 @@ import com.hotel.reservas.model.enums.TipoHabitacion;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
-// ABSTRACCION: Define la estructura y el contrato base para todos los tipos de habitación,
-// forzando a cada subclase a implementar su propio cálculo de precio.
-// HERENCIA: Superclase de HabitacionEstandar, HabitacionFamiliar, HabitacionSuite y HabitacionEjecutiva.
+// ABSTRACCION — clase abstracta que define el contrato de todas las habitaciones
+// No se puede instanciar directamente: new Habitacion() daría error
+// Obliga a cada subclase a implementar calcularPrecio()
+// HERENCIA — HabitacionSuite, HabitacionEstandar, HabitacionFamiliar,
+//            HabitacionEjecutiva heredan todos los atributos comunes
 @Entity
 @Table(name = "habitacion")
 @Inheritance(strategy = InheritanceType.JOINED)
