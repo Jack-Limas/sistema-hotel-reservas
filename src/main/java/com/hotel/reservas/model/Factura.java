@@ -25,10 +25,12 @@ public class Factura {
     @Enumerated(EnumType.STRING)
     private EstadoFactura estado = EstadoFactura.PENDIENTE;
 
+    @JsonIgnoreProperties({"habitacion", "huesped", "factura", "hibernateLazyInitializer"})
     @OneToOne
     @JoinColumn(name = "id_reserva")
     private Reserva reserva;
 
+    @JsonIgnoreProperties({"factura", "hibernateLazyInitializer"})
     @OneToMany(mappedBy = "factura", cascade = CascadeType.ALL)
     private List<DetalleFactura> detalles = new ArrayList<>();
 

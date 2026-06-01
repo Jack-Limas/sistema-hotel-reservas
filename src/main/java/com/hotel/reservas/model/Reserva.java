@@ -37,11 +37,13 @@ public class Reserva {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "id_huesped")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Huesped huesped;
 
     @NotNull
     @ManyToOne
     @JoinColumn(name = "id_habitacion")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Habitacion habitacion;
 
     @PrePersist

@@ -1,5 +1,6 @@
 package com.hotel.reservas.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
@@ -19,6 +20,7 @@ public class DetalleFactura {
     private Double precioUnitario;
     private Double subtotal;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_factura")
     private Factura factura;

@@ -1,5 +1,6 @@
 package com.hotel.reservas.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hotel.reservas.model.enums.Rol;
 import jakarta.persistence.*;
@@ -25,6 +26,7 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     private Rol rol;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "id_huesped", nullable = true)
     private Huesped huesped;

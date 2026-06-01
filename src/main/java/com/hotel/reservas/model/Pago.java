@@ -1,5 +1,6 @@
 package com.hotel.reservas.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hotel.reservas.model.enums.MetodoPago;
 import jakarta.persistence.*;
@@ -23,6 +24,7 @@ public class Pago {
     @Enumerated(EnumType.STRING)
     private MetodoPago metodoPago;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_factura")
     private Factura factura;

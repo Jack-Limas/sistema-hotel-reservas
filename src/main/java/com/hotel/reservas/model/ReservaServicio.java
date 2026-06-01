@@ -1,5 +1,6 @@
 package com.hotel.reservas.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
@@ -17,10 +18,12 @@ public class ReservaServicio {
     private Integer cantidad = 1;
     private Double subtotal;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_reserva")
     private Reserva reserva;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer"})
     @ManyToOne
     @JoinColumn(name = "id_servicio")
     private Servicio servicio;

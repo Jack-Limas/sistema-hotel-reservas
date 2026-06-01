@@ -31,13 +31,14 @@ public class OpcionMenu {
     // Estructura de árbol: Sistema Hotel → Gestión → Huéspedes
     //                                              → Habitaciones
     //                      Sistema Hotel → Reportes → Facturas
+    @JsonIgnoreProperties({"hijos", "padre", "hibernateLazyInitializer"})
     @ManyToOne
     @JoinColumn(name = "padre_id", nullable = true)
     private OpcionMenu padre;
 
-    // RECURSIVIDAD: Lista de nodos hijos. @JsonIgnoreProperties({"padre"}) permite serializar hijos
-    // pero ignora la referencia de vuelta al padre en cada hijo, evitando recursión infinita en JSON.
-    @JsonIgnoreProperties({"padre"})
+    // RECURSIVIDAD: Lista de nodos hijos. @JsonIgnoreProperties corta la referencia al padre
+    // en cada hijo, evitando recursión infinita en la serialización JSON.
+    @JsonIgnoreProperties({"padre", "hibernateLazyInitializer"})
     @OneToMany(mappedBy = "padre")
     private List<OpcionMenu> hijos = new ArrayList<>();
 
