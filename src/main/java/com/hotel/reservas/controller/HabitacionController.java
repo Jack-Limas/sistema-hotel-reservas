@@ -1,6 +1,11 @@
 package com.hotel.reservas.controller;
 
+import com.hotel.reservas.dto.HabitacionRequest;
 import com.hotel.reservas.model.Habitacion;
+import com.hotel.reservas.model.HabitacionEjecutiva;
+import com.hotel.reservas.model.HabitacionEstandar;
+import com.hotel.reservas.model.HabitacionFamiliar;
+import com.hotel.reservas.model.HabitacionSuite;
 import com.hotel.reservas.service.HabitacionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,9 +43,59 @@ public class HabitacionController {
     }
 
     @PostMapping
-    public ResponseEntity<?> crear(@RequestBody Habitacion habitacion) {
+    public ResponseEntity<?> crear(@RequestBody HabitacionRequest request) {
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(habitacionService.guardar(habitacion));
+            // POLIMORFISMO — creamos la subclase correcta según el tipo recibido.
+            // Mismo método guardar(), diferente objeto concreto según el tipo.
+            // Spring/Hibernate persiste la tabla correcta gracias a @Inheritance(JOINED).
+            Habitacion habitacion;
+
+            switch (request.getTipo()) {
+                case "SUITE" -> {
+                    HabitacionSuite s = new HabitacionSuite();
+                    s.setPrecioBase(request.getPrecioBase());
+                    s.setIncluyeDesayuno(
+                            request.getIncluyeDesayuno() != null && request.getIncluyeDesayuno());
+                    s.setVistaAlMar(
+                            request.getVistaAlMar() != null && request.getVistaAlMar());
+                    habitacion = s;
+                }
+                case "FAMILIAR" -> {
+                    HabitacionFamiliar f = new HabitacionFamiliar();
+                    f.setPrecioBase(request.getPrecioBase());
+                    f.setNumeroCamas(
+                            request.getNumeroCamas() != null ? request.getNumeroCamas() : 2);
+                    habitacion = f;
+                }
+                case "EJECUTIVA" -> {
+                    HabitacionEjecutiva e = new HabitacionEjecutiva();
+                    e.setPrecioBase(request.getPrecioBase());
+                    e.setIncluyeDesayuno(
+                            request.getIncluyeDesayuno() != null && request.getIncluyeDesayuno());
+                    e.setPisoEjecutivo(
+                            request.getPisoEjecutivo() != null && request.getPisoEjecutivo());
+                    habitacion = e;
+                }
+                default -> {
+                    HabitacionEstandar est = new HabitacionEstandar();
+                    est.setPrecioBase(request.getPrecioBase());
+                    habitacion = est;
+                }
+            }
+
+            // Campos comunes heredados de la clase abstracta Habitacion
+            habitacion.setNumero(request.getNumero());
+            habitacion.setPiso(request.getPiso());
+            habitacion.setCapacidad(request.getCapacidad());
+            habitacion.setDescripcion(request.getDescripcion());
+            habitacion.setDisponible(
+                    request.getDisponible() != null ? request.getDisponible() : true);
+            habitacion.setTipo(
+                    com.hotel.reservas.model.enums.TipoHabitacion.valueOf(request.getTipo()));
+
+            Habitacion nueva = habitacionService.guardar(habitacion);
+            return ResponseEntity.status(HttpStatus.CREATED).body(nueva);
+
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

@@ -30,7 +30,10 @@ public class FacturaController {
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(facturaService.generarFactura(idReserva));
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    "Error: " + e.getMessage()
+                    + " — Verifica que la reserva #" + idReserva
+                    + " esté en estado CHECKOUT y no tenga factura previa");
         }
     }
 
