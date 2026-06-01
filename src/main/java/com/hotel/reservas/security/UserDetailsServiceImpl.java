@@ -3,6 +3,7 @@ package com.hotel.reservas.security;
 import com.hotel.reservas.model.Usuario;
 import com.hotel.reservas.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,7 +28,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return User.builder()
                 .username(usuario.getUsername())
                 .password(usuario.getPassword())
-                .authorities("ROLE_" + usuario.getRol().name())
+                .authorities(new SimpleGrantedAuthority("ROLE_" + usuario.getRol().name()))
                 .build();
     }
 }

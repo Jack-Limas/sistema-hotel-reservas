@@ -1,5 +1,6 @@
 package com.hotel.reservas.model;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hotel.reservas.model.enums.TipoDocumento;
 import jakarta.persistence.*;
@@ -26,6 +27,7 @@ public class Huesped {
 
     private String telefono;
 
+    @JsonAlias({"CC", "CEDULA"})
     @Enumerated(EnumType.STRING)
     private TipoDocumento tipoDocumento;
 
