@@ -33,7 +33,7 @@ public class MenuService {
         List<OpcionMenu> raices = opcionMenuRepository.findByPadreIsNullAndRolAndActivoTrue(rol);
 
         for (OpcionMenu raiz : raices) {
-            construirHijos(raiz, todas);
+            construirHijos(raiz, todas);//trae SOLO los que no tienen padre (los raíz)
         }
         return raices;
     }

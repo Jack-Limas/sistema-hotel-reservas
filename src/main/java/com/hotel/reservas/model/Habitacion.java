@@ -8,11 +8,11 @@ import jakarta.validation.constraints.NotBlank;
 // ABSTRACCION — clase abstracta que define el contrato de todas las habitaciones
 // No se puede instanciar directamente: new Habitacion() daría error
 // Obliga a cada subclase a implementar calcularPrecio()
-// HERENCIA — HabitacionSuite, HabitacionEstandar, HabitacionFamiliar,
-//            HabitacionEjecutiva heredan todos los atributos comunes
-@Entity
+@Entity 
 @Table(name = "habitacion")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.JOINED) //Separa los campos en tablas distintas
+                                                //pero las une por el mismo ID cuando necesita
+                                                //construir el objeto completo
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public abstract class Habitacion {
 

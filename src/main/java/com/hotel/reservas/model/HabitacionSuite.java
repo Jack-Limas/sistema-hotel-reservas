@@ -10,7 +10,7 @@ import jakarta.persistence.*;
 // ENCAPSULAMIENTO — atributos propios privados con getters/setters
 @Entity
 @Table(name = "habitacion_suite")
-@PrimaryKeyJoinColumn
+@PrimaryKeyJoinColumn //Es lo que hace posible el JOIN. Sin esto no sabría cómo unir las tablas.
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class HabitacionSuite extends Habitacion {
 
